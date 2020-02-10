@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import url(../node_modules/@goranmedic/css-utilities/dist/index.css);
+
+body {
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}

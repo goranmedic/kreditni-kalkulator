@@ -1,0 +1,213 @@
+<div class="mod-margin-20">
+    <label id="payment-type-label">Način otplate kredita:</label>
+    <mat-radio-group
+        aria-labelledby="payment-type-label"
+        [(ngModel)]="calcType">
+        <mat-radio-button class="mod-padding-left-20 mod-padding-right-20" [value]="1">
+            Anuiteti
+        </mat-radio-button>
+        <mat-radio-button [value]="2">
+            Rate
+        </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div class="mod-margin-bottom-10 mod-margin-top-40">
+    Pregled Kredita:
+</div>
+<div *ngIf="calcType === PaymentCalculatorType.Annuity">
+    <table mat-table [dataSource]="annuitySummaryTableData" class="mat-elevation-z8 loan-summary-table" >   
+        <ng-container matColumnDef="repaymentType">
+            <th mat-header-cell *matHeaderCellDef> Tip Kredita </th>
+            <td mat-cell *matCellDef="let element; let i = index;"> {{element.repaymentType === RepaymentType.SinglePayment ? 'Obični kredit': 'Kredit s prijevremenom otplatom glavnice'}} </td>
+        </ng-container>         
+        <ng-container matColumnDef="totalPayment">
+            <th mat-header-cell *matHeaderCellDef> Ukupni Plaćeni Iznos </th>
+            <td mat-cell *matCellDef="let element; let i = index;" [ngClass]="i == 0 ? annuitySinglePaymentTotalPaymentRowClass : annuityMultiplepaymentsTotalPaymentRowClass"> {{element.totalPayment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalInterestPaid">
+            <th mat-header-cell *matHeaderCellDef> Ukupno Plaćena Kamata </th>
+            <td mat-cell *matCellDef="let element; let i = index;" [ngClass]="i == 0 ? annuitySinglePaymentTotalInterestPaymentRowClass : annuityMultiplepaymentsTotalInterestPaymentRowClass"> {{element.totalInterestPaid}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalGrant">
+            <th mat-header-cell *matHeaderCellDef> Ukupna Subvencija </th>
+            <td mat-cell *matCellDef="let element; let i = index;"> {{element.totalGrant}} </td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef> Trajanje </th>
+            <td mat-cell *matCellDef="let element; let i = index;"> {{element.duration}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cashPaymentAmount">
+            <th mat-header-cell *matHeaderCellDef> Gotovina uplaćena </th>
+            <td mat-cell *matCellDef="let element; let i = index;"> {{element.cashPaymentAmount}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="summaryDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: summaryDisplayedColumns;"></tr>
+    </table>
+</div>
+<div *ngIf="calcType === PaymentCalculatorType.Rate">
+    <table mat-table [dataSource]="rateSummaryTableData" class="mat-elevation-z8 loan-summary-table" >  
+        <ng-container matColumnDef="repaymentType">
+            <th mat-header-cell *matHeaderCellDef> Tip Kredita </th>
+            <td mat-cell *matCellDef="let element"> {{element.repaymentType === RepaymentType.SinglePayment ? 'Obični kredit': 'Kredit s prijevremenom otplatom glavnice'}} </td>
+        </ng-container>             
+        <ng-container matColumnDef="totalPayment">
+            <th mat-header-cell *matHeaderCellDef> Ukupni Plaćeni Iznos </th>
+            <td mat-cell *matCellDef="let element; let i = index;" [ngClass]="i == 0 ? rateSinglePaymentTotalPaymentRowClass : rateMultiplepaymentsTotalPaymentRowClass"> {{element.totalPayment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalInterestPaid">
+            <th mat-header-cell *matHeaderCellDef> Ukupno Plaćena Kamata </th>
+            <td mat-cell *matCellDef="let element; let i = index;" [ngClass]="i == 0 ? rateSinglePaymentTotalInterestPaymentRowClass : rateMultiplepaymentsTotalInterestPaymentRowClass"> {{element.totalInterestPaid}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalGrant">
+            <th mat-header-cell *matHeaderCellDef> Ukupna Subvencija </th>
+            <td mat-cell *matCellDef="let element; let i = index;"> {{element.totalGrant}} </td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef> Trajanje </th>
+            <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cashPaymentAmount">
+            <th mat-header-cell *matHeaderCellDef> Gotovina uplaćena </th>
+            <td mat-cell *matCellDef="let element"> {{element.cashPaymentAmount}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="summaryDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: summaryDisplayedColumns;"></tr>
+    </table>
+</div>
+<div class="mod-margin-bottom-10 mod-margin-top-40">
+    Detalji Običnog Kredita
+</div>
+<div class="mod-margin-top-40 mod-display-flex" *ngIf="calcType === PaymentCalculatorType.Annuity">
+    <table mat-table [dataSource]="annuitySinglePaymentDetailsTableData" class="mat-elevation-z8 loan-summary-table">            
+        <ng-container matColumnDef="principal">
+            <th class="" mat-header-cell *matHeaderCellDef> Iznos kredita(glavnice)</th>
+            <td mat-cell *matCellDef="let element"> {{element.principal}} </td>
+        </ng-container>
+        <ng-container matColumnDef="annuity">
+            <th mat-header-cell *matHeaderCellDef> Anuitet </th>
+            <td mat-cell *matCellDef="let element"> {{element.annuity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalPayment">
+            <th mat-header-cell *matHeaderCellDef> Ukupni Plaćeni Iznos </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalPayment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalInterestPaid">
+            <th mat-header-cell *matHeaderCellDef> Ukupno Plaćena Kamata </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalInterestPaid}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalGrant">
+            <th mat-header-cell *matHeaderCellDef> Ukupna Subvencija </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalGrant}} </td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef> Trajanje </th>
+            <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="annuityDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: annuityDisplayedColumns;"></tr>
+    </table>
+</div>
+<div *ngIf="calcType === PaymentCalculatorType.Rate">
+    <table mat-table [dataSource]="rateSinglePaymentDetailsTableData" class="mat-elevation-z8 loan-summary-table" >            
+        <ng-container matColumnDef="principal">
+            <th class="" mat-header-cell *matHeaderCellDef> Iznos kredita(glavnice)</th>
+            <td mat-cell *matCellDef="let element"> {{element.principal}} </td>
+        </ng-container>
+        <ng-container matColumnDef="firstRate">
+            <th mat-header-cell *matHeaderCellDef> Prva Rata </th>
+            <td mat-cell *matCellDef="let element"> {{element.firstRate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastRate">
+            <th mat-header-cell *matHeaderCellDef> Zadnja Rata </th>
+            <td mat-cell *matCellDef="let element"> {{element.lastRate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalPayment">
+            <th mat-header-cell *matHeaderCellDef> Ukupni Plaćeni Iznos </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalPayment}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalInterestPaid">
+            <th mat-header-cell *matHeaderCellDef> Ukupno Plaćena Kamata </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalInterestPaid}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalGrant">
+            <th mat-header-cell *matHeaderCellDef> Ukupna Subvencija </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalGrant}} </td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef> Trajanje </th>
+            <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="rateDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: rateDisplayedColumns;"></tr>
+    </table>
+</div>
+<div class="" *ngIf="paymentSummaryWithRefinancing.length > 1">
+    <div class="mod-margin-bottom-10 mod-margin-top-40">
+        Detalji Kredita S Prijevremenom Otplatom Glavnice:
+    </div>
+    <div class="mod-margin-top-40 mod-display-flex" *ngIf="calcType === PaymentCalculatorType.Annuity">
+        <table mat-table [dataSource]="annuityMultiplePaymentDetailsTableData" class="mat-elevation-z8 loan-summary-table" >            
+            <ng-container matColumnDef="principal">
+                <th class="" mat-header-cell *matHeaderCellDef> Iznos kredita(glavnice)</th>
+                <td mat-cell *matCellDef="let element"> {{element.principal}} </td>
+            </ng-container>
+            <ng-container matColumnDef="annuity">
+                <th mat-header-cell *matHeaderCellDef> Anuitet </th>
+                <td mat-cell *matCellDef="let element"> {{element.annuity}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalPayment">
+                <th mat-header-cell *matHeaderCellDef> Ukupni Plaćeni Iznos </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalPayment}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalInterestPaid">
+                <th mat-header-cell *matHeaderCellDef> Ukupno Plaćena Kamata </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalInterestPaid}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalGrant">
+                <th mat-header-cell *matHeaderCellDef> Ukupna Subvencija </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalGrant}} </td>
+            </ng-container>
+            <ng-container matColumnDef="duration">
+                <th mat-header-cell *matHeaderCellDef> Trajanje </th>
+                <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="annuityDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: annuityDisplayedColumns;"></tr>
+        </table>
+    </div>
+    <div *ngIf="calcType === PaymentCalculatorType.Rate">
+        <table mat-table [dataSource]="rateMultiplePaymentDetailsTableData" class="mat-elevation-z8 loan-summary-table" >            
+            <ng-container matColumnDef="principal">
+                <th class="" mat-header-cell *matHeaderCellDef> Iznos kredita(glavnice)</th>
+                <td mat-cell *matCellDef="let element"> {{element.principal}} </td>
+            </ng-container>
+            <ng-container matColumnDef="firstRate">
+                <th mat-header-cell *matHeaderCellDef> Prva Rata </th>
+                <td mat-cell *matCellDef="let element"> {{element.firstRate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="lastRate">
+                <th mat-header-cell *matHeaderCellDef> Zadnja Rata </th>
+                <td mat-cell *matCellDef="let element"> {{element.lastRate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalPayment">
+                <th mat-header-cell *matHeaderCellDef> Ukupni Plaćeni Iznos </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalPayment}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalInterestPaid">
+                <th mat-header-cell *matHeaderCellDef> Ukupno Plaćena Kamata </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalInterestPaid}} </td>
+            </ng-container>
+                    <ng-container matColumnDef="totalGrant">
+            <th mat-header-cell *matHeaderCellDef> Ukupna Subvencija </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalGrant}} </td>
+        </ng-container>
+            <ng-container matColumnDef="duration">
+                <th mat-header-cell *matHeaderCellDef> Trajanje </th>
+                <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="rateDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: rateDisplayedColumns;"></tr>
+        </table>
+    </div>
+</div>

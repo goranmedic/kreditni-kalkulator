@@ -1,0 +1,118 @@
+<div>
+    <div>
+        Željeni iznos kredita:
+        <input type="number" [(ngModel)]="amountBorrowed" />
+    </div>
+    <div>
+        Vremenski rok otplate u godinama:
+        <input type="number" [(ngModel)]="creditLength" />
+    </div>
+    <div>
+        Kamatna stopa:
+        <input type="number" [(ngModel)]="interestRate" />
+    </div>
+    <div>
+        Trajanje subvencije:
+        <input type="number" [(ngModel)]="grantDuration" />
+    </div>
+    <div>
+        Iznos subvencije:
+        <input type="number" [(ngModel)]="grantPercentage" />
+    </div>
+    <div class="wrapper">
+        <div>
+            <h1> Anuiteti</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>RB</th>
+                        <th>Glavnica</th>
+                        <th>Kamata</th>
+                        <th>Mjesečni obrok</th>
+                        <th>Subvencija</th>
+                        <th>Obrok nakon subvencije</th>
+                        <th>Nedospjela Glavnica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let i of months">
+                        <td>{{ i }}</td>
+                        <td>{{ annuityCalculator.borrowedAmountPaymentForMonth(i) }}</td>
+                        <td>{{ annuityCalculator.interestPaidForMonth(i) }}</td>
+                        <td>{{ annuityCalculator.getAnnuity() }}</td>
+                        <td>{{ annuityCalculator.grantedPaymentForMonth(i) }}</td>
+                        <td>{{ annuityCalculator.amountToPayWithGrantForMonth(i) }}</td>
+                        <td>{{ annuityCalculator.borrowedAmountLeft(i) }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Glavnica</th>
+                        <th>Kamata</th>
+                        <th>Ukupno plaćeno</th>
+                        <th>Subvencija</th>
+                        <th>Nakon subvencije</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>UKUPNO:</th>
+                        <th>{{ annuityCalculator.getAmountBorrowed()}}</th>
+                        <th>{{ annuityCalculator.getTotalInterestPaid() }}</th>
+                        <th>{{ annuityCalculator.getTotalPayment()}}</th>
+                        <th>{{ annuityCalculator.getTotalGrant() }}</th>
+                        <th>{{ annuityCalculator.getTotalPaymentWithGrant() }}</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div>
+            <h1>Rate</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>RB</th>
+                        <th>Glavnica</th>
+                        <th>Kamata</th>
+                        <th>Mjesečni obrok</th>
+                        <th>Subvencija</th>
+                        <th>Obrok nakon subvencije</th>
+                        <th>Nedospjela Glavnica</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let i of months">
+                        <td>{{ i }}</td>
+                        <td>{{rateCalculator.getBorrowedAmountPaymentPerMonth()}}</td>
+                        <td>{{rateCalculator.interestPaidForMonth(i)}}</td>
+                        <td>{{rateCalculator.amountToPayForMonth(i)}}</td>
+                        <td>{{rateCalculator.grantedPaymentForMonth(i)}}</td>
+                        <td>{{rateCalculator.amountToPayWithGrantForMonth(i)}}</td>
+                        <td>{{rateCalculator.borrowedAmountLeft(i)}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Glavnica</th>
+                        <th>Kamata</th>
+                        <th>Ukupno plaćeno</th>
+                        <th>Subvencija</th>
+                        <th>Nakon subvencije</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>UKUPNO:</th>
+                        <th>{{rateCalculator.getAmountBorrowed()}}</th>
+                        <th>{{rateCalculator.getTotalInterestPaid()}}</th>
+                        <th>{{rateCalculator.getTotalPayment()}}</th>
+                        <th>{{rateCalculator.getTotalGrant()}}</th>
+                        <th>{{rateCalculator.getTotalPaymentWithGrant()}}</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

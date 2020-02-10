@@ -1,0 +1,53 @@
+<div class="mod-display-flex mod-flex-flow-column">
+    <div class="mod-flex-grow-1 flex-basis-0 mod-display-flex mod-flex-flow-column">
+        <div class="mod-padding-20">
+            Željeni iznos kredita:
+            <input type="number" matInput [(ngModel)]="amountBorrowed">
+        </div>
+        <div class="mod-padding-20">
+            Vremenski rok otplate u godinama:
+            <input type="number" matInput [(ngModel)]="creditLength">
+        </div>
+        <div class="mod-padding-20">
+            Kamatna stopa:
+            <input type="number" matInput [(ngModel)]="interestRate" />
+        </div>
+        <mat-checkbox class="mod-padding-left-20" [(ngModel)]="hasGrant">APN Subvencija</mat-checkbox>
+        <div class="mod-padding-20" [hidden]="!hasGrant">
+            Trajanje subvencije:
+            <input type="number" matInput [(ngModel)]="grantDuration" />
+        </div>
+        <div class="mod-padding-20" [hidden]="!hasGrant">
+            Iznos subvencije:
+            <input type="number" matInput [(ngModel)]="grantPercentage" />
+        </div>
+        <div class="mod-padding-20">
+            <button mat-button (click)="addEarlyRepayment()">Dodaj smanjenje glavnice</button>
+        </div>
+        <div class="early-repayments-box mod-padding-20" *ngIf="earlyRepayments.length > 0">
+            <div class="early-repayment" *ngFor="let earlyRepayment of earlyRepayments; let i = index">
+                    <div>
+                        Godina uplate:
+                        <input type="number" matInput  [(ngModel)]="earlyRepayment.year" />
+                    </div>
+                    <div>
+                        Iznos uplate:
+                        <input type="number" matInput  [(ngModel)]="earlyRepayment.amount" />
+                    </div>   
+                    <div>
+                        Novi vremenski rok otplate:
+                        <input type="number" matInput  [(ngModel)]="earlyRepayment.newLoanDuration" />
+                    </div>
+                    <div>
+                        Nova kamata:
+                        <input type="number" matInput  [(ngModel)]="earlyRepayment.newInterestRate" />
+                    </div>
+                    <button mat-button color="warn" (click)="removeEarlyRepayment(i)">Izbriši</button>
+                </div>
+        </div>
+        <button *ngIf="earlyRepayments.length > 0" mat-button mat-raised-button color="primary" (click)="calculateEarlyRepayments()">Izračunaj kredit uz smanjenje glavnice</button>
+    </div>
+    <div>
+        <loan-summary [paymentSummary]="initialRepaymentProjection" [paymentSummaryWithRefinancing]="repaymentProjections"></loan-summary>
+    </div>
+</div>

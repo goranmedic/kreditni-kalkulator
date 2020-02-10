@@ -1,0 +1,51 @@
+<div class="mod-padding-20 mod-display-flex mod-flex-flow-column ">
+    <div class="mod-padding-bottom-20 mod-display-flex">
+        <div (click)="switchToCalcType(PaymentCalculatorType.Rate)">
+            Rate
+        </div>
+        <div (click)="switchToCalcType(PaymentCalculatorType.Annuity)">
+            Anuiteti
+        </div>
+    </div>
+    <div *ngIf="calcType === PaymentCalculatorType.Rate">
+        <div class="mod-display-flex mod-flex-flow-column">
+            <div>
+                Iznos kredita(glavnice): {{paymentSummary.rate.principal}}
+            </div>
+            <div>
+                Prva Rata: {{paymentSummary.rate.firstRate}}
+            </div>
+            <div>
+                Zadnja Rata: {{paymentSummary.rate.lastRate}}
+            </div>
+            <div>
+                Ukupni Plaćeni Iznos: {{paymentSummary.rate.totalPayment}}
+            </div>
+            <div>
+                Ukupno Plaćena Kamata: {{paymentSummary.rate.totalInterestPaid}}
+            </div>
+            <div>
+                Trajanje : {{paymentSummary.rate.duration}}
+            </div>
+        </div> 
+    </div>
+    <div *ngIf="calcType === PaymentCalculatorType.Annuity">
+            <div class="mod-display-flex mod-flex-flow-column">
+                    <div>
+                        Iznos kredita(glavnice): {{paymentSummary.annuity.principal}}
+                    </div>
+                    <div>
+                        Anuitet: {{paymentSummary.annuity.annuity}}
+                    </div>
+                    <div>
+                        Ukupni Plaćeni Iznos: {{paymentSummary.annuity.totalPayment}}
+                    </div>
+                    <div>
+                        Ukupno Plaćena Kamata: {{paymentSummary.annuity.totalInterestPaid}}
+                    </div>
+                    <div>
+                        Trajanje : {{paymentSummary.annuity.duration}}
+                    </div>
+                </div>  
+        </div>
+</div>
