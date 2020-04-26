@@ -14,19 +14,20 @@ export class RatePaymentCalculator {
     private amountBorrowedCoveredByGrant: number;
     private grantPercentage: number;
     private grantDuration: number;
+    private propertySize: number;
 
-    constructor(interestRate: number, creditLength: number, amountBorrowed: number, grantPercentage: number, grantDuration: number) { 
+    private maxGrantPerSquaredMeter: number = 1500;
+    private maxGrantTotal: number = 100000;
+
+    constructor(interestRate: number, creditLength: number, amountBorrowed: number, grantPercentage: number, grantDuration: number, propertySize: number) { 
         this.interestRate = interestRate;
         this.creditLength = creditLength*12;
         this.amountBorrowed = amountBorrowed;
         this.grantDuration = grantDuration;
         this.grantPercentage = grantPercentage;
-        if(amountBorrowed > 100000){
-            this.amountBorrowedCoveredByGrant = 100000;
-        }
-        else {
-            this.amountBorrowedCoveredByGrant = amountBorrowed;
-        }
+        this.propertySize = propertySize;
+
+        this.amountBorrowedCoveredByGrant = propertySize * this.maxGrantPerSquaredMeter > this.maxGrantTotal ? this.maxGrantTotal : propertySize * this.maxGrantPerSquaredMeter;
 
         this.firstRate = this.calculateFirstRate();
         this.borrowedAmountPaymentPerMonth = this.calculateBorrowedAmountPaymentPerMonth();

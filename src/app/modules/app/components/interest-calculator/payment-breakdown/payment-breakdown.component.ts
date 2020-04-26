@@ -15,6 +15,7 @@ export class PaymentBreakdownComponent implements OnInit {
     private _interestRate: number;
     private _grantPercentage: number;
     private _grantDuration: number;
+    private _propertySize: number;
     private _annuityCalculator: AnnuityPaymentCalculator;
     private _rateCalculator: RatePaymentCalculator;
 
@@ -45,12 +46,16 @@ export class PaymentBreakdownComponent implements OnInit {
     public set rateCalculator(value: RatePaymentCalculator){
         this._rateCalculator = value;
     }
+    public set propertySize(value: number) {
+        this._propertySize = value;
+    }
 
     public get amountBorrowed() {return this._amountBorrowed};
     public get creditLength() {return this._creditLength};
     public get interestRate() {return this._interestRate};
     public get grantPercentage() {return this._grantPercentage};
     public get grantDuration() {return this._grantDuration};
+    public get propertySize() {return this._propertySize};
     public get annuityCalculator() {return this._annuityCalculator};
     public get rateCalculator() {return this._rateCalculator};
 
@@ -64,12 +69,13 @@ export class PaymentBreakdownComponent implements OnInit {
         this.interestRate = 2.09;
         this.grantDuration = 5;
         this.grantPercentage = 30;
-        this.annuityCalculator = new AnnuityPaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration);
-        this.rateCalculator = new RatePaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration);
+        this.propertySize = 60;
+        this.annuityCalculator = new AnnuityPaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration, this.propertySize);
+        this.rateCalculator = new RatePaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration, this.propertySize);
     }
 
     updateCalculators(){
-        this.annuityCalculator = new AnnuityPaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration);
-        this.rateCalculator = new RatePaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration);
+        this.annuityCalculator = new AnnuityPaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration, this.propertySize);
+        this.rateCalculator = new RatePaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration, this.propertySize);
     }
 }

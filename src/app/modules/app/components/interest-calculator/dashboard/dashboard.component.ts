@@ -17,14 +17,17 @@ export class DashboardComponent implements OnInit {
     private _amountBorrowed: number;
     private _creditLength: number;
     private _interestRate: number;
+    private _propertySize: number;
     private _grantDuration: number;
     private _grantPercentage: number;
     private _annuityCalculator: AnnuityPaymentCalculator;
     private _rateCalculator: RatePaymentCalculator;
     private _hasGrant: boolean;
+
     public  earlyRepayments: Array<EarlyRepayment> = [];
     public repaymentProjections: Array<RepaymentSummary> = [];
     public initialRepaymentProjection: RepaymentSummary;
+    public getPrincipalLeftAfterMonthValue: number;
 
     public set hasGrant(value: boolean){
         this._hasGrant = value;
@@ -40,6 +43,10 @@ export class DashboardComponent implements OnInit {
     }
     public set interestRate(value: number) {
         this._interestRate = value;
+        this.updateProjections();
+    }
+    public set propertySize(value: number) {
+        this._propertySize = value;
         this.updateProjections();
     }
     public set grantDuration(value: number) {
@@ -63,6 +70,7 @@ export class DashboardComponent implements OnInit {
 
     public get amountBorrowed() {return this._amountBorrowed};
     public get creditLength() {return this._creditLength};
+    public get propertySize() {return this._propertySize};
     public get interestRate() {return this._interestRate};
     public get grantDuration() {return this._grantDuration};
     public get grantPercentage() {return this._grantPercentage};
@@ -74,12 +82,14 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() { 
-        this.hasGrant = false;
-        this.amountBorrowed = 220000;
-        this.creditLength = 30;
-        this.interestRate = 2.09;
-        this.grantDuration = 0;
-        this.grantPercentage = 0;
+        this.hasGrant = true;
+        this.amountBorrowed = 130000;
+        this.creditLength = 15;
+        this.interestRate = 2.28;
+        this.grantDuration = 5;
+        this.grantPercentage = 30;
+        this.propertySize = 50;
+        this.getPrincipalLeftAfterMonthValue = Math.ceil(this.creditLength * 12 / 2);
     }
     
     updateCalculators(){
@@ -87,22 +97,24 @@ export class DashboardComponent implements OnInit {
        this.updateRateCalculator();
     }
 
-    updateAnnuityCalculator(amountBorrowed?: number, creditLength?: number, interestRate?: number, grantPercentage?: number, grantDuration?: number){
+    updateAnnuityCalculator(amountBorrowed?: number, creditLength?: number, propertySize?: number, interestRate?: number, grantPercentage?: number, grantDuration?: number){
         this.annuityCalculator = new AnnuityPaymentCalculator(
             isUndefined(interestRate) ? this.interestRate : interestRate, 
             isUndefined(creditLength) ? this.creditLength : creditLength, 
             isUndefined(amountBorrowed) ? this.amountBorrowed : amountBorrowed, 
             isUndefined(grantPercentage) ? this.grantPercentage : grantPercentage, 
-            isUndefined(grantDuration) ? this.grantDuration : grantDuration);
+            isUndefined(grantDuration) ? this.grantDuration : grantDuration,
+            isUndefined(propertySize) ? this.propertySize : propertySize);
     }
-    updateRateCalculator(amountBorrowed?: number, creditLength?: number, interestRate?: number, grantPercentage?: number, grantDuration?: number){
 
+    updateRateCalculator(amountBorrowed?: number, creditLength?: number, propertySize?: number, interestRate?: number, grantPercentage?: number, grantDuration?: number){
         this.rateCalculator = new RatePaymentCalculator(
             isUndefined(interestRate) ? this.interestRate : interestRate, 
             isUndefined(creditLength) ? this.creditLength : creditLength, 
             isUndefined(amountBorrowed) ? this.amountBorrowed : amountBorrowed, 
             isUndefined(grantPercentage) ? this.grantPercentage : grantPercentage, 
-            isUndefined(grantDuration) ? this.grantDuration : grantDuration);
+            isUndefined(grantDuration) ? this.grantDuration : grantDuration,
+            isUndefined(propertySize) ? this.propertySize : propertySize);
     }
 
     updateProjections = () => {
@@ -240,5 +252,12 @@ export class DashboardComponent implements OnInit {
         }
 
         return principalValid && creditLengthValid && interestRateValid && grantValid && earlyRepaymentsValid;
+    }
+
+    getPrincipalLeftAfterMonthAmount = (): string => {
+        var principalLeft = "";
+        principalLeft += "Rate: " + this.rateCalculator.borrowedAmountLeft(this.getPrincipalLeftAfterMonthValue).toFixed(2)
+        principalLeft += " Anuiteti: " + this.annuityCalculator.borrowedAmountLeft(this.getPrincipalLeftAfterMonthValue).toFixed(2)
+        return principalLeft;
     }
 }

@@ -1,31 +1,35 @@
 <div class="mod-display-flex mod-flex-flow-column">
     <div class="mod-flex-grow-1 flex-basis-0 mod-display-flex mod-flex-flow-column">
-        <div class="mod-padding-20">
+        <div class="mod-padding-20 mod-display-flex">
             Željeni iznos kredita:
             <input type="number" matInput [(ngModel)]="amountBorrowed">
         </div>
-        <div class="mod-padding-20">
+        <div class="mod-padding-20 mod-display-flex">
             Vremenski rok otplate u godinama:
             <input type="number" matInput [(ngModel)]="creditLength">
         </div>
-        <div class="mod-padding-20">
+        <div class="mod-padding-20 mod-display-flex">
             Kamatna stopa:
             <input type="number" matInput [(ngModel)]="interestRate" />
         </div>
         <mat-checkbox class="mod-padding-left-20" [(ngModel)]="hasGrant">APN Subvencija</mat-checkbox>
+        <div class="mod-padding-20 " [hidden]="!hasGrant">
+            Veličina stana (m2):
+            <input type="number" matInput [(ngModel)]="propertySize" />
+        </div>       
         <div class="mod-padding-20" [hidden]="!hasGrant">
-            Trajanje subvencije:
+            Trajanje subvencije u godinama:
             <input type="number" matInput [(ngModel)]="grantDuration" />
         </div>
         <div class="mod-padding-20" [hidden]="!hasGrant">
-            Iznos subvencije:
+            Iznos subvencije (%):
             <input type="number" matInput [(ngModel)]="grantPercentage" />
         </div>
-        <div class="mod-padding-20">
+        <div class="mod-padding-20 mod-display-flex">
             <button mat-button (click)="addEarlyRepayment()">Dodaj smanjenje glavnice</button>
         </div>
-        <div class="early-repayments-box mod-padding-20" *ngIf="earlyRepayments.length > 0">
-            <div class="early-repayment" *ngFor="let earlyRepayment of earlyRepayments; let i = index">
+        <div class="early-repayments-box mod-padding-20 mod-display-flex" *ngIf="earlyRepayments.length > 0">
+            <div class="early-repayment mod-display-flex" *ngFor="let earlyRepayment of earlyRepayments; let i = index">
                     <div>
                         Godina uplate:
                         <input type="number" matInput  [(ngModel)]="earlyRepayment.year" />
@@ -49,5 +53,8 @@
     </div>
     <div>
         <loan-summary [paymentSummary]="initialRepaymentProjection" [paymentSummaryWithRefinancing]="repaymentProjections"></loan-summary>
+    </div>
+    <div class="mod-display-flex mod-flex-column mod-margin-top-45">
+        <span>Iznos neotplaćene glavnice nakon <input type="number" matInput [(ngModel)]="getPrincipalLeftAfterMonthValue" /> mjeseci: {{getPrincipalLeftAfterMonthAmount()}} </span>
     </div>
 </div>

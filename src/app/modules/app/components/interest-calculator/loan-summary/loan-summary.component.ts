@@ -38,6 +38,7 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
 
     calcType: PaymentCalculatorType = PaymentCalculatorType.Rate;
 
+
     get PaymentCalculatorType() { return PaymentCalculatorType; }
     get RepaymentType() { return RepaymentType; }
     constructor() { }
