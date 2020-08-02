@@ -14,7 +14,7 @@ export class AnnuityPaymentCalculator {
     private grantDuration: number;
     private propertySize: number;
     private maxGrantPerSquaredMeter: number = 1500;
-    private maxGrantTotal: number = 100000;
+    private maxGrantTotal: number =  100000;
 
     constructor(interestRate: number, creditLength: number, amountBorrowed: number, grantPercentage: number, grantDuration: number, propertySize: number) {
         this.interestRate = interestRate;
@@ -24,7 +24,7 @@ export class AnnuityPaymentCalculator {
         this.grantPercentage = grantPercentage;
         this.propertySize = propertySize;
 
-        this.amountBorrowedCoveredByGrant = propertySize * this.maxGrantPerSquaredMeter > this.maxGrantTotal ? this.maxGrantTotal : propertySize * this.maxGrantPerSquaredMeter;
+        this.amountBorrowedCoveredByGrant = this.propertySize * this.maxGrantPerSquaredMeter > this.maxGrantTotal ? this.maxGrantTotal : this.propertySize * this.maxGrantPerSquaredMeter;
 
         this.firstAnnuity = this.calculateFirstAnnuity();
         this.firstAnnuityCoveredByGrant = this.calculateFirstAnnuityCoveredByGrant();

@@ -6,16 +6,18 @@ import { AppComponent } from './app.component';
 import { BaseComponent } from './base.component';
 import { PaymentBreakdownComponent } from './modules/app/components/interest-calculator/payment-breakdown/payment-breakdown.component';
 import { DashboardComponent } from './modules/app/components/interest-calculator/dashboard/dashboard.component';
-import { PaymentSummaryComponent } from './modules/app/components/interest-calculator/payment-summary/payment-summary.component';
 import { LoanSummaryComponent } from './modules/app/components/interest-calculator/loan-summary/loan-summary.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MaterialUIModule} from "./material-ui.module";
+import { HeaderComponent } from './modules/app/components/header/header.component';
+import { BugReportComponent } from './modules/app/components/bug-report/bug-report.component';
 const components = [
   AppComponent,
   BaseComponent,
+  HeaderComponent,
+  BugReportComponent,
   DashboardComponent,
   PaymentBreakdownComponent,
-  PaymentSummaryComponent,
   LoanSummaryComponent
 ];
 

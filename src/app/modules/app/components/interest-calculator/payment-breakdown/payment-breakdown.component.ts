@@ -64,12 +64,12 @@ export class PaymentBreakdownComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        this.amountBorrowed = 220000;
-        this.creditLength = 30;
-        this.interestRate = 2.09;
-        this.grantDuration = 5;
+        this.amountBorrowed = 175000;
+        this.creditLength = 24;
+        this.interestRate = 2.19;
+        this.grantDuration = 9;
         this.grantPercentage = 30;
-        this.propertySize = 60;
+        this.propertySize = 74;
         this.annuityCalculator = new AnnuityPaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration, this.propertySize);
         this.rateCalculator = new RatePaymentCalculator(this.interestRate, this.creditLength, this.amountBorrowed, this.grantPercentage, this.grantDuration, this.propertySize);
     }

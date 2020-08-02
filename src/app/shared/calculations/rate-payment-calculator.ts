@@ -27,7 +27,7 @@ export class RatePaymentCalculator {
         this.grantPercentage = grantPercentage;
         this.propertySize = propertySize;
 
-        this.amountBorrowedCoveredByGrant = propertySize * this.maxGrantPerSquaredMeter > this.maxGrantTotal ? this.maxGrantTotal : propertySize * this.maxGrantPerSquaredMeter;
+        this.amountBorrowedCoveredByGrant = this.propertySize * this.maxGrantPerSquaredMeter > this.maxGrantTotal ? this.maxGrantTotal : this.propertySize * this.maxGrantPerSquaredMeter;
 
         this.firstRate = this.calculateFirstRate();
         this.borrowedAmountPaymentPerMonth = this.calculateBorrowedAmountPaymentPerMonth();
@@ -69,6 +69,16 @@ export class RatePaymentCalculator {
         var interest = 0;
 
         for(let i = 1; i <= this.creditLength; i++){
+            interest += this.interestPaidForMonth(i);
+        }
+
+        return Math.round(interest * 100) / 100;
+    }
+
+    public calculateTotalInterestPaidUpToMonth(month: number){
+        var interest = 0;
+
+        for(let i = 1; i <= month; i++){
             interest += this.interestPaidForMonth(i);
         }
 

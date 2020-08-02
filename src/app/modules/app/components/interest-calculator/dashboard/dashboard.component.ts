@@ -1,10 +1,9 @@
-import { Component, OnInit, DoCheck, IterableDiffers, KeyValueDiffer, KeyValueDiffers, KeyValueChangeRecord } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AnnuityPaymentCalculator } from 'src/app/shared/calculations/annuity-payment-calculator';
 import { RatePaymentCalculator } from 'src/app/shared/calculations/rate-payment-calculator';
 import { EarlyRepayment } from 'src/app/shared/models/EarlyRepayment';
 import { RepaymentSummary } from 'src/app/shared/models/RepaymentSummary';
 import {isUndefined} from "util";
-import { PaymentBreakdownInfo, PaymentBreakdown } from 'src/app/shared/models/PaymentBreakdownInfo';
 import deepCopy from 'src/app/shared/utility/deepCopy';
 
 @Component({
@@ -83,12 +82,12 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() { 
         this.hasGrant = true;
-        this.amountBorrowed = 130000;
-        this.creditLength = 15;
-        this.interestRate = 2.28;
-        this.grantDuration = 5;
+        this.amountBorrowed = 175000;
+        this.creditLength = 24;
+        this.interestRate = 2.19;
+        this.grantDuration = 9;
         this.grantPercentage = 30;
-        this.propertySize = 50;
+        this.propertySize = 74;
         this.getPrincipalLeftAfterMonthValue = Math.ceil(this.creditLength * 12 / 2);
     }
     
@@ -145,8 +144,7 @@ export class DashboardComponent implements OnInit {
         this.repaymentProjections.push(initialRepayment);
         this.earlyRepayments.forEach((earlyRepayment: EarlyRepayment, index: number) => {
             this.calculateEarlyRepayment(earlyRepayment, index);
-        })
-        
+        });
     }
 
     updateEarlierProjection = (nextRepayment: EarlyRepayment, index: number) => {
@@ -187,13 +185,12 @@ export class DashboardComponent implements OnInit {
         this.repaymentProjections[this.repaymentProjections.length-1].rate.lastRate = lastRateBeforeEarlyRepayment;
         this.repaymentProjections[this.repaymentProjections.length-1].rate.duration = creditDurationRate;
 
-        this.updateAnnuityCalculator(principalLeftAnnuity, nextRepayment.newLoanDuration, nextRepayment.newInterestRate, 0, 0);
-        this.updateRateCalculator(principalLeftRate, nextRepayment.newLoanDuration, nextRepayment.newInterestRate, 0, 0);
+        this.updateAnnuityCalculator(principalLeftAnnuity, nextRepayment.newLoanDuration, undefined, nextRepayment.newInterestRate, 0, 0);
+        this.updateRateCalculator(principalLeftRate, nextRepayment.newLoanDuration, undefined, nextRepayment.newInterestRate, 0, 0);
     }
 
     calculateEarlyRepayment = (earlyRepayment: EarlyRepayment, index: number) => {
         this.updateEarlierProjection(earlyRepayment, index);
-
         this.repaymentProjections.push({
             annuity: {
                 annuity: this.annuityCalculator.calculateFirstAnnuity(),
@@ -222,6 +219,7 @@ export class DashboardComponent implements OnInit {
 
     removeEarlyRepayment = (index: number) => {
         this.earlyRepayments.splice(index,1);
+        this.calculateEarlyRepayments();
     }
 
     calculateEarlyRepayments = () => {
@@ -255,9 +253,20 @@ export class DashboardComponent implements OnInit {
     }
 
     getPrincipalLeftAfterMonthAmount = (): string => {
+        var totalPaymentRate = 0;
+        var totalPaymentAnnuity = 0;
+        for(let i = 0; i < this.getPrincipalLeftAfterMonthValue; i++) {
+            totalPaymentRate += this.rateCalculator.amountToPayForMonth(i);
+            totalPaymentAnnuity += this.annuityCalculator.calculateFirstAnnuity();
+        }
+
         var principalLeft = "";
-        principalLeft += "Rate: " + this.rateCalculator.borrowedAmountLeft(this.getPrincipalLeftAfterMonthValue).toFixed(2)
-        principalLeft += " Anuiteti: " + this.annuityCalculator.borrowedAmountLeft(this.getPrincipalLeftAfterMonthValue).toFixed(2)
+        var principalLeftRate = this.rateCalculator.borrowedAmountLeft(this.getPrincipalLeftAfterMonthValue).toFixed(2);
+        var interestPaidRate = this.rateCalculator.calculateTotalInterestPaidUpToMonth(this.getPrincipalLeftAfterMonthValue).toFixed(2);
+        var principalLeftAnnuity = this.annuityCalculator.borrowedAmountLeft(this.getPrincipalLeftAfterMonthValue);
+        var interestPaidAnunuity = (this.annuityCalculator.calculateFirstAnnuity()*this.getPrincipalLeftAfterMonthValue - (this.annuityCalculator.getAmountBorrowed()-principalLeftAnnuity)).toFixed(2);
+        principalLeft += " Rate: " + "Dužan: " + principalLeftRate + " Plaćeno kamate: " + interestPaidRate + "Ukupno plaćeno do tad: " + totalPaymentRate 
+        principalLeft += " Anuiteti: " + "Dužan: "  + principalLeftAnnuity.toFixed(2) + " Plaćeno kamate: " + interestPaidAnunuity +"  Ukupno plaćeno do tad: "+totalPaymentAnnuity;
         return principalLeft;
     }
 }

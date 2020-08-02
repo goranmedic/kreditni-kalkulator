@@ -2,7 +2,6 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { RepaymentSummary } from 'src/app/shared/models/RepaymentSummary';
 import { PaymentCalculatorType } from 'src/app/shared/enums/PaymentCalculatorType';
 import { LoanSummaryTableRow } from 'src/app/shared/models/LoanSummaryTableRow';
-import { RepaymentType } from 'src/app/shared/enums/RepaymentType';
 
 @Component({
     selector: 'loan-summary',
@@ -16,7 +15,7 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
 
     annuitySummaryTableData: Array<LoanSummaryTableRow> = [];
     rateSummaryTableData: Array<LoanSummaryTableRow> = [];
-    summaryDisplayedColumns: Array<string> = ['repaymentType', 'duration', 'cashPaymentAmount', 'totalInterestPaid', 'totalGrant', 'totalPayment'];
+    summaryDisplayedColumns: Array<string> = ['duration', 'cashPaymentAmount', 'totalInterestPaid', 'totalGrant', 'totalPayment'];
 
     annuityMultiplePaymentDetailsTableData: any;
     rateMultiplePaymentDetailsTableData: any;
@@ -40,7 +39,6 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
 
 
     get PaymentCalculatorType() { return PaymentCalculatorType; }
-    get RepaymentType() { return RepaymentType; }
     constructor() { }
 
     updateTableCssClasses = () => {
@@ -60,7 +58,6 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
         this.annuitySummaryTableData = [];
         const singlePayment: LoanSummaryTableRow = {
             duration: this.paymentSummary.annuity.duration,
-            repaymentType: RepaymentType.SinglePayment,
             totalInterestPaid: this.paymentSummary.annuity.totalInterestPaid,
             totalGrant: this.paymentSummary.annuity.totalGrant,
             totalPayment: this.paymentSummary.annuity.totalPayment,
@@ -74,8 +71,9 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
             let totalPayment = 0;
             let cashPaymentAmount = 0;
             let totalGrant = 0;
-    
+            
             for(let i = 0; i < this.paymentSummaryWithRefinancing.length; i++) {
+                
                 duration += this.paymentSummaryWithRefinancing[i].annuity.duration;
                 totalGrant += this.paymentSummaryWithRefinancing[i].annuity.totalGrant;
                 totalInterestPaid += this.paymentSummaryWithRefinancing[i].annuity.totalInterestPaid;
@@ -88,8 +86,7 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
                 totalInterestPaid,
                 totalPayment,
                 totalGrant,
-                cashPaymentAmount,
-                repaymentType: RepaymentType.MultiplePayments,
+                cashPaymentAmount
             }
             this.annuitySummaryTableData.push(multiplePayments)
         }
@@ -100,7 +97,6 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
 
         const singlePayment: LoanSummaryTableRow = {
             duration: this.paymentSummary.rate.duration,
-            repaymentType: RepaymentType.SinglePayment,
             totalInterestPaid: this.paymentSummary.rate.totalInterestPaid,
             totalGrant: this.paymentSummary.rate.totalGrant,
             totalPayment: this.paymentSummary.rate.totalPayment,
@@ -129,8 +125,7 @@ export class LoanSummaryComponent implements OnInit, OnChanges {
                 totalInterestPaid,
                 totalPayment,
                 totalGrant,
-                cashPaymentAmount,
-                repaymentType: RepaymentType.MultiplePayments,
+                cashPaymentAmount
             }
     
             this.rateSummaryTableData.push(multiplePayments)

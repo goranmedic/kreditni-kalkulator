@@ -1,23 +1,30 @@
 <div>
-    <div>
-        Željeni iznos kredita:
-        <input type="number" [(ngModel)]="amountBorrowed" />
-    </div>
-    <div>
-        Vremenski rok otplate u godinama:
-        <input type="number" [(ngModel)]="creditLength" />
-    </div>
-    <div>
-        Kamatna stopa:
-        <input type="number" [(ngModel)]="interestRate" />
-    </div>
-    <div>
-        Trajanje subvencije:
-        <input type="number" [(ngModel)]="grantDuration" />
-    </div>
-    <div>
-        Iznos subvencije:
-        <input type="number" [(ngModel)]="grantPercentage" />
+    <div class="mod-flex-grow-1 flex-basis-0 mod-display-flex mod-flex-flow-column">
+        <div class="mod-padding-20 mod-display-flex">
+            Željeni iznos kredita (€):
+            <input type="number" matInput [(ngModel)]="amountBorrowed">
+        </div>
+        <div class="mod-padding-20 mod-display-flex">
+            Vremenski rok otplate u godinama:
+            <input type="number" matInput [(ngModel)]="creditLength">
+        </div>
+        <div class="mod-padding-20 mod-display-flex">
+            Kamatna stopa:
+            <input type="number" matInput [(ngModel)]="interestRate" />
+        </div>
+        <mat-checkbox class="mod-padding-left-20" [(ngModel)]="hasGrant">APN Subvencija</mat-checkbox>
+        <div class="mod-padding-20 " [hidden]="!hasGrant">
+            Veličina stana (m2):
+            <input type="number" matInput [(ngModel)]="propertySize" />
+        </div>       
+        <div class="mod-padding-20" [hidden]="!hasGrant">
+            Trajanje subvencije u godinama:
+            <input type="number" matInput [(ngModel)]="grantDuration" />
+        </div>
+        <div class="mod-padding-20" [hidden]="!hasGrant">
+            Iznos subvencije (%):
+            <input type="number" matInput [(ngModel)]="grantPercentage" />
+        </div>
     </div>
     <div class="wrapper">
         <div>

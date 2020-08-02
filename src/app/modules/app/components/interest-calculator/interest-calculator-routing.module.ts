@@ -8,16 +8,12 @@ export const interestCalculatorRoutes: Routes = [
     path: "",
     children: [
       {
-        path: "dashboard",
+        path: "izracun-kredita",
         component: DashboardComponent
       },
       {
         path: "plan-otplate",
         component: PaymentBreakdownComponent
-      },
-      {
-        path: "**",
-        redirectTo: "/dashboard"
       }
     ]
   }
