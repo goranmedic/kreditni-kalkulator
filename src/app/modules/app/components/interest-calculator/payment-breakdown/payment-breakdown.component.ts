@@ -18,6 +18,16 @@ export class PaymentBreakdownComponent implements OnInit {
     private _propertySize: number;
     private _annuityCalculator: AnnuityPaymentCalculator;
     private _rateCalculator: RatePaymentCalculator;
+    private _hasGrant: boolean;
+
+    public set hasGrant(value: boolean){
+        this._hasGrant = value;
+        if(!value){
+            this._grantDuration = 0;
+            this._grantPercentage = 0;
+        }
+        this.updateCalculators();
+    }
 
     public set amountBorrowed(value: number) {
         this._amountBorrowed = value;
@@ -58,12 +68,14 @@ export class PaymentBreakdownComponent implements OnInit {
     public get propertySize() {return this._propertySize};
     public get annuityCalculator() {return this._annuityCalculator};
     public get rateCalculator() {return this._rateCalculator};
+    public get hasGrant() {return this._hasGrant};
 
     public months: Array<number>;
 
     constructor() { }
 
     ngOnInit() {
+        this.hasGrant = true;
         this.amountBorrowed = 175000;
         this.creditLength = 24;
         this.interestRate = 2.19;
